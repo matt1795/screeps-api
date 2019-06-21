@@ -84,22 +84,52 @@ namespace Screeps {
         White = 10,
     };
 
-    LOOK_CREEPS: "creep",
-    LOOK_ENERGY: "energy",
-    LOOK_RESOURCES: "resource",
-    LOOK_SOURCES: "source",
-    LOOK_MINERALS: "mineral",
-    LOOK_STRUCTURES: "structure",
-    LOOK_FLAGS: "flag",
-    LOOK_CONSTRUCTION_SITES: "constructionSite",
-    LOOK_NUKES: "nuke",
-    LOOK_TERRAIN: "terrain",
-    LOOK_TOMBSTONES: "tombstone",
-    LOOK_POWER_CREEPS: "powerCreep",
+	enum class Look {
+		Creeps,
+		Energy,
+		Resources,
+		Sources,
+		Minerals,
+		Structures,
+		Flags,
+		ConstructionSites,
+		Nukes,
+		Terrain,
+		Tombstones,
+		PowerCreeps
+	};
 
-    OBSTACLE_OBJECT_TYPES: ["spawn", "creep", "powerCreep", "source", "mineral", "controller", "constructedWall", "extension", "link", "storage", "tower", "observer", "powerSpawn", "powerBank", "lab", "terminal","nuker"],
+	std::unordered_map<Look, std::string> lookToStringMap const = {
+		{ Look::Creeps, "creep" },
+		{ Look::Energy, "energy" },
+		{ Look::Resources, "resource" },
+		{ Look::Sources, "source" },
+		{ Look::Minerals, "mineral" },
+		{ Look::Structures, "structure" },
+		{ Look::Flags, "flag" },
+		{ Look::ConstructionSites, "constructionSite" },
+		{ Look::Nukes, "nuke" },
+		{ Look::Terrain, "terrain" },
+		{ Look::Tombstones, "tombstone" },
+		{ Look::PowerCreeps, "powerCreep" },
+	};
 
-    std::set<std::string> obstacleObjectTypes const = {
+	std::unordered_map<std::string, Look> const stringToLookMap = {
+		{ "creep", Look::Creeps },
+		{ "energy", Look::Energy },
+		{ "resource", Look::Resources },
+		{ "source", Look::Sources },
+		{ "mineral", Look::Minerals },
+		{ "structure", Look::Structures },
+		{ "flag", Look::Flags },
+		{ "constructionSite", Look::ConstructionSites },
+		{ "nuke", Look::Nukes },
+		{ "terrain", Look::Terrain },
+		{ "tombstone", Look::Tombstones },
+		{ "powerCreep", Look::PowerCreeps },
+	};
+
+    std::set<std::string> const obstacleObjectTypes = {
         "spawn",
         "creep",
         "powerCreep",
@@ -130,7 +160,7 @@ namespace Screeps {
         Claim
     };
 
-    std::map<BodyPart, std::string> const bodyPartMap = {
+    std::unordered_map<BodyPart, std::string> const bodyPartToStringMap = {
         { BodyPart::Move, "move" },
         { BodyPart::Work, "work" },
         { BodyPart::Carry, "carry" },
@@ -139,9 +169,20 @@ namespace Screeps {
         { BodyPart::Tough, "tough" },
         { BodyPart::Heal, "heal" },
         { BodyPart::Claim, "claim" },
-    }
+    };
 
-    std::map<BodyPart, int> bodyPartCost const = {
+    std::unordered_map<BodyPart, std::string> const stringToBodyPartMap = {
+        { "move", BodyPart::Move },
+        { "work", BodyPart::Work },
+        { "carry", BodyPart::Carry },
+        { "attack", BodyPart::Attack },
+        { "ranged_attack", BodyPart::RangedAttack },
+        { "tough", BodyPart::Tough },
+        { "heal", BodyPart::Heal },
+        { "claim", BodyPart::Claim },
+    };
+
+    std::unordered_map<BodyPart, int> const bodyPartCost = {
         { BodyPart::Move, 50 },
         { BodyPart::Work, 100 },
         { BodyPart::Carry, 50 },
@@ -154,13 +195,6 @@ namespace Screeps {
 
     int const worldWidth = 202;
     int const worldHeight = 202;
-
-    class Creep {
-        inline static int const lifeTime: 1500,
-        inline static int const claimLifeTime: 600,
-        inline static double const corpseRate: 0.2,
-        inline static int const partMaxEnergy: 125,
-    };
 
     int const carryCapacity = 50;
     int const harvestPower = 2;
@@ -176,70 +210,10 @@ namespace Screeps {
     double const repairCost = 0.01;
     int const dismantleCost = 0.005;
 
-    class Rampart {
-        inline static int const decayAmount = 300;
-        inline static int const decayTime = 100;
-        inline static int const hits = 1;
-        inline static std::map<int, int> hitsMax const = {
-            { 2, 300000 },
-            { 3, 1000000 },
-            { 4, 3000000 },
-            { 5, 10000000 },
-            { 6, 30000000 },
-            { 7, 100000000 },
-            { 8, 300000000 }
-        };
-    }
-
     namespace EnergyInfo {
         int const regenTime = 300;
         int const decay = 1000;
     }
-
-    class Spawn {
-        inline static int const hits = 5000;
-        inline static int const energyStart = 300;
-        inline static int const energyCapacity = 300;
-        inline static int const spawnTime = 3;
-        inline static double const renewRatio = 1.2;
-    };
-
-    class EnergySource {
-        SOURCE_ENERGY_CAPACITY: 3000,
-        SOURCE_ENERGY_NEUTRAL_CAPACITY: 1500,
-        SOURCE_ENERGY_KEEPER_CAPACITY: 4000,
-    };
-
-    class Wall {
-        WALL_HITS: 1,
-        WALL_HITS_MAX: 300000000,
-    };
-
-    class Extension {
-        EXTENSION_HITS: 1000,
-        EXTENSION_ENERGY_CAPACITY: {0: 50, 1: 50, 2: 50, 3: 50, 4: 50, 5: 50, 6: 50, 7: 100, 8: 200},
-    };
-
-    class Road {
-        ROAD_HITS: 5000,
-        ROAD_WEAROUT: 1,
-        ROAD_WEAROUT_POWER_CREEP: 100,
-        ROAD_DECAY_AMOUNT: 100,
-        ROAD_DECAY_TIME: 1000,
-    };
-
-    class Link {
-        LINK_HITS: 1000,
-        LINK_HITS_MAX: 1000,
-        LINK_CAPACITY: 800,
-        LINK_COOLDOWN: 1,
-        LINK_LOSS_RATIO: 0.03,
-    };
-
-    class Storage {
-        STORAGE_CAPACITY: 1000000,
-        STORAGE_HITS: 10000,
-    };
 
     enum class Structure {
         Spawn,
@@ -263,6 +237,7 @@ namespace Screeps {
         Nuker
     };
 
+	Translator<Structure, std::string> 
     STRUCTURE_SPAWN: "spawn",
     STRUCTURE_EXTENSION: "extension",
     STRUCTURE_ROAD: "road",
@@ -303,92 +278,12 @@ namespace Screeps {
     CONSTRUCTION_COST_ROAD_SWAMP_RATIO: 5,
     CONSTRUCTION_COST_ROAD_WALL_RATIO: 150,
 
-    class Controller {
-        levels: {1: 200, 2: 45000, 3: 135000, 4: 405000, 5: 1215000, 6: 3645000, 7: 10935000},
-        structures: {
-            "spawn": {0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 2, 8: 3},
-            "extension": {0: 0, 1: 0, 2: 5, 3: 10, 4: 20, 5: 30, 6: 40, 7: 50, 8: 60},
-            "link": {1: 0, 2: 0, 3: 0, 4: 0, 5: 2, 6: 3, 7: 4, 8: 6},
-            "road": {0: 2500, 1: 2500, 2: 2500, 3: 2500, 4: 2500, 5: 2500, 6: 2500, 7: 2500, 8: 2500},
-            "constructedwall": {1: 0, 2: 2500, 3: 2500, 4: 2500, 5: 2500, 6: 2500, 7: 2500, 8: 2500},
-            "rampart": {1: 0, 2: 2500, 3: 2500, 4: 2500, 5: 2500, 6: 2500, 7: 2500, 8: 2500},
-            "storage": {1: 0, 2: 0, 3: 0, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1},
-            "tower": {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2, 7: 3, 8: 6},
-            "observer": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 1},
-            "powerspawn": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 1},
-            "extractor": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1, 7: 1, 8: 1},
-            "terminal": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1, 7: 1, 8: 1},
-            "lab": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 3, 7: 6, 8: 10},
-            "container": {0: 5, 1: 5, 2: 5, 3: 5, 4: 5, 5: 5, 6: 5, 7: 5, 8: 5},
-            "nuker": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 1}
-        },
-        downgrade: {1: 20000, 2: 10000, 3: 20000, 4: 40000, 5: 80000, 6: 120000, 7: 150000, 8: 200000},
-        downgradeRestore: 100,
-        downgradeSafemodeThreshold: 5000,
-        claimDowngrade: 300,
-        reserve: 1,
-        reserveMax: 5000,
-        maxUpgradePerTick: 15,
-        attackBlockedUpgrade: 1000,
-        nukeBlockedUpgrade: 200,
-    };
 
     namespace SafeModeInfo {
         SAFE_MODE_DURATION: 20000,
         SAFE_MODE_COOLDOWN: 50000,
         SAFE_MODE_COST: 1000,
     }
-
-    class Tower {
-        TOWER_HITS: 3000,
-        TOWER_CAPACITY: 1000,
-        TOWER_ENERGY_COST: 10,
-        TOWER_POWER_ATTACK: 600,
-        TOWER_POWER_HEAL: 400,
-        TOWER_POWER_REPAIR: 800,
-        TOWER_OPTIMAL_RANGE: 5,
-        TOWER_FALLOFF_RANGE: 20,
-        TOWER_FALLOFF: 0.75,
-    };
-
-    class Observer {
-        OBSERVER_HITS: 500,
-        OBSERVER_RANGE: 10,
-    };
-
-    class PowerBank {
-        POWER_BANK_HITS: 2000000,
-        POWER_BANK_CAPACITY_MAX: 5000,
-        POWER_BANK_CAPACITY_MIN: 500,
-        POWER_BANK_CAPACITY_CRIT: 0.3,
-        POWER_BANK_DECAY: 5000,
-        POWER_BANK_HIT_BACK: 0.5,
-    };
-
-    class PowerSpawn {
-        POWER_SPAWN_HITS: 5000,
-        POWER_SPAWN_ENERGY_CAPACITY: 5000,
-        POWER_SPAWN_POWER_CAPACITY: 100,
-        POWER_SPAWN_ENERGY_RATIO: 50,
-    };
-
-    class Extractor {
-        EXTRACTOR_HITS: 500,
-        EXTRACTOR_COOLDOWN: 5,
-    };
-
-    class Lab {
-        LAB_HITS: 500,
-        LAB_MINERAL_CAPACITY: 3000,
-        LAB_ENERGY_CAPACITY: 2000,
-        LAB_BOOST_ENERGY: 20,
-        LAB_BOOST_MINERAL: 30,
-        LAB_COOLDOWN: 10,           // not used
-        LAB_REACTION_AMOUNT: 5,
-        LAB_UNBOOST_ENERGY: 0,
-        LAB_UNBOOST_MINERAL: 15,
-    };
-
     GCL_POW: 2.4,
     GCL_MULTIPLY: 1000000,
     GCL_NOVICE: 3,

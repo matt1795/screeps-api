@@ -1,0 +1,5 @@
+    class EnergySource {
+        SOURCE_ENERGY_CAPACITY: 3000,
+        SOURCE_ENERGY_NEUTRAL_CAPACITY: 1500,
+        SOURCE_ENERGY_KEEPER_CAPACITY: 4000,
+    };

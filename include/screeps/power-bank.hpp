@@ -1,0 +1,8 @@
+    class PowerBank {
+        POWER_BANK_HITS: 2000000,
+        POWER_BANK_CAPACITY_MAX: 5000,
+        POWER_BANK_CAPACITY_MIN: 500,
+        POWER_BANK_CAPACITY_CRIT: 0.3,
+        POWER_BANK_DECAY: 5000,
+        POWER_BANK_HIT_BACK: 0.5,
+    };

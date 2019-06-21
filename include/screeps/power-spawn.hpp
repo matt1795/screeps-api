@@ -1,0 +1,6 @@
+    class PowerSpawn {
+        POWER_SPAWN_HITS: 5000,
+        POWER_SPAWN_ENERGY_CAPACITY: 5000,
+        POWER_SPAWN_POWER_CAPACITY: 100,
+        POWER_SPAWN_ENERGY_RATIO: 50,
+    };
