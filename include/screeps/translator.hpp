@@ -1,25 +1,38 @@
-#include <unordered_map>
-#include <string>
+// Translator Class
+//
+// Author: Matthew Knight
+// File Name: translator.hpp
+// Date: 2019-06-20
 
-std::array data = {
-	std::make_pair(1, "one"),
-	std::make_pair(2, "two")
-};
+#pragma once
 
-template <typename PairArray>
-class Translator {
-	PairArray const& data;
-	public:
-	constexpr Translator(PairArray const& data) : data(data) {}
+#include <algorithm>
+#include <type_traits>
 
-	template <template T>
-	PairArray::const_iterator operator[](T const& val) {
-		auto it = std::find_if(data.cbegin(), data.cend(), [](auto& elem) {
-				if constexpr (std::is_same_v<T, PairArray::T::first_value>) {
-					return val == elem.first;
-				} else {
-					return val == elem.second;
-				}
-				});
-	}
-};
+namespace Screeps {
+    /**
+     * This class acts as a simple bi-directional map. It does do linear search
+     * in order to keep code size small so it's not meant for large datasets. On
+     * the user end, you create an std::array of pairs, each entry being two
+     * values that map to eachother, and construct a translator with that data.
+     */
+    template <typename PairArray> class Translator { PairArray const& data;
+
+      public:
+        constexpr Translator(PairArray const& data)
+            : data(data) {}
+
+        template <typename T>
+        typename PairArray::const_iterator operator[](T const& value) {
+            return std::find_if(data.cbegin(), data.cend(), [&](auto& elem) {
+                if constexpr (std::is_same_v<
+                                  T,
+                                  typename PairArray::value_type::first_type>) {
+                    return value == elem.first;
+                } else {
+                    return value == elem.second;
+                }
+            });
+        }
+    };
+} // namespace Screeps
