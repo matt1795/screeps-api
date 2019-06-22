@@ -16,123 +16,88 @@ namespace Screeps {
         inline static emscripten::val game = emscripten::val::global("Game");
 
       public:
-        std::unordered_map<std::string, ConstructionSite> constructionSites() {
-            return {};
-        }
+		/**
+		 *
+		 */
+        static std::unordered_map<Id, ConstructionSite> constructionSites();
 
-        std::unordered_map<std::string, Creep> creeps() { return {}; }
-
-        std::unordered_map<std::string, Flag> flags() { return {}; }
-
-        std::unordered_map<std::string, PowerCreep> powerCreeps() { return {}; }
-
-        std::unordered_map<std::string, Room> rooms() { return {}; }
-
-        std::unordered_map<std::string, Spawn> spawns() { return {}; }
-
-        std::unordered_map<std::string, Structure> structures() { return {}; }
+		/**
+		 *
+		 */
+        static std::unordered_map<Creep::Name, Creep> creeps();
+        static std::unordered_map<std::string, Flag> flags();
+        static std::unordered_map<std::string, PowerCreep> powerCreeps();
+        static std::unordered_map<std::string, Room> rooms();
+        static std::unordered_map<std::string, Spawn> spawns();
+        static std::unordered_map<std::string, Structure> structures();
 
         class Cpu {
-            static int limit() { return game["cpu"]["limit"].as<int>(); }
-
-            static int tickLimit() {
-                return game["cpu"]["tickLimit"].as<int>();
-            }
-
-            static int bucket() { return game["cpu"]["bucket"].as<int>(); }
-
+            static int limit();
+            static int tickLimit();
+            static int bucket();
             // TODO: shard limits
         };
 
         class Gcl {
-            static int level() { return game["gcl"]["level"].as<int>(); }
-
-            static int progress() { return game["gcl"]["progress"].as<int>(); }
-
-            static int progressTotal() {
-                return game["gcl"]["progressTotal"].as<int>();
-            }
+            static int level();
+            static int progress();
+            static int progressTotal(); 
         };
 
         class Gpl {
-            static int level() { return game["gpl"]["level"].as<int>(); }
-
-            static int progress() { return game["gpl"]["progress"].as<int>(); }
-
-            static int progressTotal() {
-                return game["gpl"]["progressTotal"].as<int>();
-            }
+            static int level();
+            static int progress();
+            static int progressTotal(); 
         };
 
         class Shard {
-            static std::string name() {
-                return game["shard"]["name"].as<std::string>();
-            }
-
-            static std::string type() {
-                return game["shard"]["type"].as<std::string>();
-            }
-
-            static bool ptr() { return game["shard"]["ptr"].as<bool>(); }
+            static std::string name();
+            static std::string type();
+            static bool ptr();
         };
 
         class Map {
             static std::unordered_map<std::string, std::string>
-            describeExits(std::string const& roomName) {
-                return {};
-            }
-
+            describeExits(Room const& room);
             // TODO: pathfinding options
-            static Find findExit(std::string const& fromRoom,
-                                 std::string const& toRoom) {}
-
+            static Find findExit(Room const& fromRoom,
+                                 Room const& toRoom);
             // TODO: pathfinding options
             static std::vector<std::pair<Find, std::string>>
-            findRoute(std::string const& fromRoom, std::string const& toRoom) {}
-
-            static int getRoomLinearDistance(std::string const& roomName1,
-                                             std::string const& roomName2,
-                                             bool continuous = false) {}
-
-            static Terrain getRoomTerrain(std::string const& roomName) {}
-
-            static int getWorldSize() {}
-
-            static bool isRoomAvailable(std::string const& roomName) {}
+            findRoute(Room const& fromRoom, Room const& toRoom);
+            static int getRoomLinearDistance(Room const& room1,
+                                             Room const& room2,
+                                             bool continuous = false);
+            static Terrain getRoomTerrain(Room const& room);
+            static int getWorldSize();
+            static bool isRoomAvailable(Room const& room);
         };
 
         class Market {
             static int credits();
-
             static std::vector<Transaction> incomingTransactions();
             static std::vector<Transaction> outgoingTransactions();
             static std::unordered_map<std::string, Order> orders();
             static int calcTransactionCost(int amount,
-                                           std::string const& roomName1,
-                                           std::string const& roomName2);
-            static Error cancelOrder(std::string const& orderId);
-            static Error changeOrderPrice(std::string const& orderId,
+                                           Room const& room1,
+                                           Room const& room2);
+            static Error cancelOrder(Order::Id const& id);
+            static Error changeOrderPrice(Order::Id const& id,
                                           int newPrice);
-            static Error createOrder(std::string const& type,
-                                     std::string const& resourceType, int price,
+            static Error createOrder(Order::Type const& type,
+                                     Resource const& resource, int price,
                                      int totalAmount,
                                      std::string const& roomName);
-            static Error deal(std::string const& orderId, int amount,
-                              std::string const& yourRoomName);
-            static Error extendOrder(std::string const& orderId, int addAmount);
+            static Error deal(Order::Id const& id, int amount,
+                              Room const& yourRoom);
+            static Error extendOrder(Order::Id const& id, int addAmount);
             // TODO: getAllOrders
-            static Order getOrderById(std::string const& id);
+            static Order getOrderById(Order::Id const& id);
         };
 
-        int time() { return game["time"].as<int>(); }
-
-        emscripten::val getObjectById(std::string const& id) {
-            return game.call<emscripten::val>("getObjectById", id);
-        }
-
-        void notify(std::string const& message,
-                    unsigned int groupInterval = 0) {
-            game.call<void>("notify", message, groupInterval);
-        }
+        static int time();
+        static emscripten::val getObjectById(Id const& id);
+        static void notify(std::string const& message,
+                    unsigned int groupInterval = 0);
     };
 } // namespace Screeps

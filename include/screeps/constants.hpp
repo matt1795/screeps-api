@@ -140,6 +140,9 @@ namespace Screeps {
     Translator structureTranslator(structureData);
     Translator resourceTranslator(resourceData);
 
+	Lookup bodyPartCostLookup(bodyPartCostData);
+	Lookup structureCostLookup(structureCostData);
+
     int const worldWidth = 202;
     int const worldHeight = 202;
     int const carryCapacity = 50;

@@ -11,9 +11,9 @@ namespace Screeps {
             emscripten::val::global("RawMemory");
 
       public:
-        std::string get() { return rawMemory.call<std::string>("get"); }
+        static std::string get() { return rawMemory.call<std::string>("get"); }
 
-        void set(std::string const& value) {
+        static void set(std::string const& value) {
             rawMemory.call<void>("set", value);
         }
     };
