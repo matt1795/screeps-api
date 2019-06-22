@@ -4,11 +4,9 @@ from conans import ConanFile, CMake, tools
 class ScreepsApiConan(ConanFile):
     author = "Matthew Knight"
     description = "C++ API for screeps"
-    exports_sources = ["CMakeLists.txt", "main.cpp"]
-    generators = ["cmake"]
+    generators = ["virtualenv"]
     license = "MIT"
     name = "screeps-api"
-    requires = "zlib/1.2.11@conan/stable"
     settings = {"os": ["Emscripten"]}
     topics = ("conan", "screeps", "emscripten", "js", "javascript")
     url = "https://github.com/matt1795/screeps-api.git"
@@ -29,3 +27,8 @@ class ScreepsApiConan(ConanFile):
     def package(self):
         cmake = self._configure_cmake()
         cmake.install()
+
+    def imports(self):
+        self.copy("*.html", "", "bin")
+        self.copy("*.wasm", "", "bin")
+        self.copy("*.js", "", "bin")
