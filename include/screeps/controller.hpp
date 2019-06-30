@@ -1,4 +1,8 @@
-    class Controller {
+#pragma once
+
+namespace Screeps {
+class Controller {
+    /*
         levels: {1: 200, 2: 45000, 3: 135000, 4: 405000, 5: 1215000, 6: 3645000, 7: 10935000},
         structures: {
             "spawn": {0: 0, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 2, 8: 3},
@@ -26,4 +30,6 @@
         maxUpgradePerTick: 15,
         attackBlockedUpgrade: 1000,
         nukeBlockedUpgrade: 200,
+        */
     };
+}

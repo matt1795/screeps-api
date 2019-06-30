@@ -19,12 +19,12 @@
 #include "screeps/spawn.hpp"
 #include "screeps/structure.hpp"
 #include "screeps/transaction.hpp"
+#include "screeps/types.hpp"
 
 #include <string>
 #include <unordered_map>
 
 namespace Screeps {
-    using Id = std::string;
     class Game {
         inline static emscripten::val game = emscripten::val::global("Game");
 
@@ -66,8 +66,7 @@ namespace Screeps {
             static std::unordered_map<std::string, std::string>
             describeExits(Room const& room);
             // TODO: pathfinding options
-            static Find findExit(Room const& fromRoom,
-                                 Room const& toRoom);
+            static Find findExit(Room const& fromRoom, Room const& toRoom);
             // TODO: pathfinding options
             static std::vector<std::pair<Find, std::string>>
             findRoute(Room const& fromRoom, Room const& toRoom);
@@ -84,12 +83,10 @@ namespace Screeps {
             static std::vector<Transaction> incomingTransactions();
             static std::vector<Transaction> outgoingTransactions();
             static std::unordered_map<std::string, Order> orders();
-            static int calcTransactionCost(int amount,
-                                           Room const& room1,
+            static int calcTransactionCost(int amount, Room const& room1,
                                            Room const& room2);
             static Error cancelOrder(Order::Id const& id);
-            static Error changeOrderPrice(Order::Id const& id,
-                                          int newPrice);
+            static Error changeOrderPrice(Order::Id const& id, int newPrice);
             static Error createOrder(Order::Type const& type,
                                      Resource const& resource, int price,
                                      int totalAmount,
@@ -104,6 +101,6 @@ namespace Screeps {
         static int time();
         static emscripten::val getObjectById(Id const& id);
         static void notify(std::string const& message,
-                    unsigned int groupInterval = 0);
+                           unsigned int groupInterval = 0);
     };
 } // namespace Screeps

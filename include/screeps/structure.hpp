@@ -1,6 +1,10 @@
 #pragma once
+
+#include "screeps/room-object.hpp"
+#include "screeps/types.hpp"
+
 namespace Screeps {
-    class Structure {
+    class Structure : public RoomObject {
       public:
         enum class Type {
             Spawn,
@@ -23,5 +27,14 @@ namespace Screeps {
             Container,
             Nuker
         };
+
+        int hits() const;
+        int hitsMax() const;
+        Id id() const;
+        Type structureType() const;
+
+        Error destroy();
+        bool isActive();
+        Error notifyWhenAttacked(bool enabled);
     };
 } // namespace Screeps

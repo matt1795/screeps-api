@@ -1,7 +1,7 @@
 #pragma once
 
 namespace Screeps {
-enum class Error {
+    enum class Error {
         Ok = 0,
         NotOwner = -1,
         NoPath = -2,
@@ -51,7 +51,7 @@ enum class Error {
         HostilePowerCreeps = 121,
     };
 
-    enum class Position {
+    enum class Direction {
         Top = 1,
         TopRight = 2,
         Right = 3,
@@ -75,20 +75,20 @@ enum class Error {
         White = 10,
     };
 
-	enum class Look {
-		Creeps,
-		Energy,
-		Resources,
-		Sources,
-		Minerals,
-		Structures,
-		Flags,
-		ConstructionSites,
-		Nukes,
-		Terrain,
-		Tombstones,
-		PowerCreeps
-	};
+    enum class Look {
+        Creeps,
+        Energy,
+        Resources,
+        Sources,
+        Minerals,
+        Structures,
+        Flags,
+        ConstructionSites,
+        Nukes,
+        Terrain,
+        Tombstones,
+        PowerCreeps
+    };
 
     enum class BodyPart {
         Move,
@@ -153,4 +153,4 @@ enum class Error {
         Swamp = 2,
         Lava = 4,
     };
-}
+} // namespace Screeps
