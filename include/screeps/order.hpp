@@ -1,4 +1,13 @@
-    class Order {
-        ORDER_SELL: "sell",
-        ORDER_BUY: "buy",
+#pragma once
+
+#include <string>
+
+namespace Screeps {
+    struct Order {
+        using Id = std::string;
+        enum class Type {
+            Buy,
+            Sell
+        };
     };
+}

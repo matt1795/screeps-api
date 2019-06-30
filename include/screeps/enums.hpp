@@ -1,4 +1,7 @@
-    enum class Error {
+#pragma once
+
+namespace Screeps {
+enum class Error {
         Ok = 0,
         NotOwner = -1,
         NoPath = -2,
@@ -88,37 +91,16 @@
 	};
 
     enum class BodyPart {
-        Move
-        Work
-        Carry
-        Attack
-        RangedAttack
-        Tough
-        Heal
+        Move,
+        Work,
+        Carry,
+        Attack,
+        RangedAttack,
+        Tough,
+        Heal,
         Claim
     };
 
-    enum class Structure {
-        Spawn,
-        Extension,
-        Road,
-        Wall,
-        Rampart,
-        KeeperLair,
-        Portal,
-        Controller,
-        Link,
-        Storage,
-        Tower,
-        Observer,
-        PowerBank,
-        PowerSpawn,
-        Extractor,
-        Lab,
-        Terminal,
-        Container,
-        Nuker
-    };
     enum class Resource {
         Energy,
         Power,
@@ -171,3 +153,4 @@
         Swamp = 2,
         Lava = 4,
     };
+}

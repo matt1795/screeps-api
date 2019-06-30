@@ -4,6 +4,10 @@
 // File Name: game.hpp
 // Date: 2019-06-20
 
+#include "screeps/game.hpp"
+
+#include "screeps/constants.hpp"
+
 #include <emscripten/val.h>
 
 #include <string>
@@ -61,6 +65,7 @@ namespace Screeps {
 
     bool Game::Shard::ptr() { return game["shard"]["ptr"].as<bool>(); }
 
+    /*
     std::unordered_map<std::string, std::string>
     Game::Map::describeExits(std::string const& roomName) {
         return {};
@@ -77,7 +82,7 @@ namespace Screeps {
                                          std::string const& roomName2,
                                          bool continuous = false) {}
 
-    Terrain Game::Map::getRoomTerrain(std::string const& roomName) {}
+    Room::Terrain Game::Map::getRoomTerrain(std::string const& roomName) {}
 
     int Game::Map::getWorldSize() {}
 
@@ -102,6 +107,7 @@ namespace Screeps {
                              std::string const& yourRoomName);
     Error Game::Market::extendOrder(std::string const& orderId, int addAmount);
     Order Game::Market::getOrderById(std::string const& id);
+    */
 
     int Game::time() { return game["time"].as<int>(); }
 
@@ -110,7 +116,7 @@ namespace Screeps {
     }
 
     void Game::notify(std::string const& message,
-                      unsigned int groupInterval = 0) {
+                      unsigned int groupInterval) {
         game.call<void>("notify", message, groupInterval);
     }
 } // namespace Screeps

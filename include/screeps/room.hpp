@@ -10,13 +10,19 @@
 
 #include <emscripten/val.h>
 
+#include <array>
+
 namespace Screeps {
-	class Room {
-		emscripten::val object;
-	public:
-		Room(emscripten::val&& obj) : object(obj) {}
-		Room(std::string const& name) : Room(Game::Rooms[name]) {}
-		
-		Name name() const {}
-	};
-}
+    class Room {
+        emscripten::val object;
+
+      public:
+        using Name = std::string;
+        using Terrain = std::array<std::array<uint8_t, 50>, 50>;
+
+        Room(emscripten::val&& obj);
+        Room(std::string const& name);
+
+        Name name() const;
+    };
+} // namespace Screeps

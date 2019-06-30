@@ -8,22 +8,28 @@
 
 #include <emscripten/val.h>
 
+#include "screeps/constants.hpp"
+#include "screeps/construction-site.hpp"
+#include "screeps/creep.hpp"
+#include "screeps/enums.hpp"
+#include "screeps/flag.hpp"
+#include "screeps/order.hpp"
+#include "screeps/power-creep.hpp"
+#include "screeps/room.hpp"
+#include "screeps/spawn.hpp"
+#include "screeps/structure.hpp"
+#include "screeps/transaction.hpp"
+
 #include <string>
 #include <unordered_map>
 
 namespace Screeps {
+    using Id = std::string;
     class Game {
         inline static emscripten::val game = emscripten::val::global("Game");
 
       public:
-		/**
-		 *
-		 */
         static std::unordered_map<Id, ConstructionSite> constructionSites();
-
-		/**
-		 *
-		 */
         static std::unordered_map<Creep::Name, Creep> creeps();
         static std::unordered_map<std::string, Flag> flags();
         static std::unordered_map<std::string, PowerCreep> powerCreeps();
@@ -31,32 +37,32 @@ namespace Screeps {
         static std::unordered_map<std::string, Spawn> spawns();
         static std::unordered_map<std::string, Structure> structures();
 
-        class Cpu {
+        struct Cpu {
             static int limit();
             static int tickLimit();
             static int bucket();
             // TODO: shard limits
         };
 
-        class Gcl {
+        struct Gcl {
             static int level();
             static int progress();
-            static int progressTotal(); 
+            static int progressTotal();
         };
 
-        class Gpl {
+        struct Gpl {
             static int level();
             static int progress();
-            static int progressTotal(); 
+            static int progressTotal();
         };
 
-        class Shard {
+        struct Shard {
             static std::string name();
             static std::string type();
             static bool ptr();
         };
 
-        class Map {
+        struct Map {
             static std::unordered_map<std::string, std::string>
             describeExits(Room const& room);
             // TODO: pathfinding options
@@ -68,12 +74,12 @@ namespace Screeps {
             static int getRoomLinearDistance(Room const& room1,
                                              Room const& room2,
                                              bool continuous = false);
-            static Terrain getRoomTerrain(Room const& room);
+            static Room::Terrain getRoomTerrain(Room const& room);
             static int getWorldSize();
             static bool isRoomAvailable(Room const& room);
         };
 
-        class Market {
+        struct Market {
             static int credits();
             static std::vector<Transaction> incomingTransactions();
             static std::vector<Transaction> outgoingTransactions();

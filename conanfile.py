@@ -4,7 +4,7 @@ from conans import ConanFile, CMake, tools
 class ScreepsApiConan(ConanFile):
     author = "Matthew Knight"
     description = "C++ API for screeps"
-    generators = ["virtualenv"]
+    generators = ["virtualenv", "cmake"]
     license = "MIT"
     name = "screeps-api"
     settings = {"os": ["Emscripten"]}
