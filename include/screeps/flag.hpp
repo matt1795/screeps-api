@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
+
 namespace Screeps {
-    class Flag {
+    struct Flag {
+        using Name = std::string;
     };
 }

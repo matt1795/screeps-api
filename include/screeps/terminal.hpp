@@ -1,7 +1,10 @@
+#pragma once
+namespace Screeps {
     class Terminal {
-        TERMINAL_CAPACITY: 300000,
-        TERMINAL_HITS: 3000,
-        TERMINAL_SEND_COST: 0.1,
-        TERMINAL_MIN_SEND: 100,
-        TERMINAL_COOLDOWN: 10,
+        inline static int capacity = 300000;
+        inline static int hits = 3000;
+        inline static float sendCost = 0.1;
+        inline static int minSend = 100;
+        inline static int cooldown = 10;
     };
+}

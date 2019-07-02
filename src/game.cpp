@@ -7,116 +7,183 @@
 #include "screeps/game.hpp"
 
 #include "screeps/constants.hpp"
+#include "screeps/util.hpp"
 
 #include <emscripten/val.h>
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 
 namespace Screeps {
-    std::unordered_map<std::string, ConstructionSite>
-    Game::constructionSites() {
-        return {};
-    }
+    namespace {
+        emscripten::val game = emscripten::val::global("Game");
+        std::optional<std::unordered_map<Id, ConstructionSite>>
+            constructionSitesOptional;
+        std::optional<std::unordered_map<Creep::Name, Creep>> creepsOptional;
+        std::optional<std::unordered_map<Room::Name, Room>> roomsOptional;
+        std::optional<std::unordered_map<Spawn::Name, Spawn>> spawnsOptional;
+        std::optional<std::unordered_map<Id, Structure>> structuresOptional;
+    } // namespace
 
-    std::unordered_map<std::string, Creep> Game::creeps() { return {}; }
+    namespace Game {
+        std::unordered_map<Id, ConstructionSite> const& constructionSites() {
+            if (!constructionSitesOptional)
+                constructionSitesOptional = mapFromJsObject<ConstructionSite>(
+                    game["constructionSites"]);
 
-    std::unordered_map<std::string, Flag> Game::flags() { return {}; }
+            return *constructionSitesOptional;
+        }
 
-    std::unordered_map<std::string, PowerCreep> Game::powerCreeps() {
-        return {};
-    }
+        std::unordered_map<Creep::Name, Creep> const& creeps() {
+            if (!creepsOptional)
+                creepsOptional = mapFromJsObject<Creep>(game["creeps"]);
 
-    std::unordered_map<std::string, Room> Game::rooms() { return {}; }
+            return *creepsOptional;
+        }
 
-    std::unordered_map<std::string, Spawn> Game::spawns() { return {}; }
+        std::unordered_map<Room::Name, Room> const& rooms() {
+            if (!roomsOptional)
+                roomsOptional = mapFromJsObject<Room>(game["rooms"]);
 
-    std::unordered_map<std::string, Structure> Game::structures() { return {}; }
+            return *roomsOptional;
+        }
 
-    int Game::Cpu::limit() { return game["cpu"]["limit"].as<int>(); }
+        std::unordered_map<Spawn::Name, Spawn> const& spawns() {
+            if (!spawnsOptional)
+                spawnsOptional = mapFromJsObject<Spawn>(game["spawns"]);
 
-    int Game::Cpu::tickLimit() { return game["cpu"]["tickLimit"].as<int>(); }
+            return *spawnsOptional;
+        }
 
-    int Game::Cpu::bucket() { return game["cpu"]["bucket"].as<int>(); }
+        std::unordered_map<Id, Structure> const& structures() {
+            if (!structuresOptional)
+                structuresOptional =
+                    mapFromJsObject<Structure>(game["structures"]);
 
-    int Game::Gcl::level() { return game["gcl"]["level"].as<int>(); }
+            return *structuresOptional;
+        }
 
-    int Game::Gcl::progress() { return game["gcl"]["progress"].as<int>(); }
+        namespace Cpu {
+            int limit() { return game["cpu"]["limit"].as<int>(); }
 
-    int Game::Gcl::progressTotal() {
-        return game["gcl"]["progressTotal"].as<int>();
-    }
+            int tickLimit() { return game["cpu"]["tickLimit"].as<int>(); }
 
-    int Game::Gpl::level() { return game["gpl"]["level"].as<int>(); }
+            int bucket() { return game["cpu"]["bucket"].as<int>(); }
+        } // namespace Cpu
 
-    int Game::Gpl::progress() { return game["gpl"]["progress"].as<int>(); }
+        namespace Gcl {
+            int level() { return game["gcl"]["level"].as<int>(); }
 
-    int Game::Gpl::progressTotal() {
-        return game["gpl"]["progressTotal"].as<int>();
-    }
+            int progress() { return game["gcl"]["progress"].as<int>(); }
 
-    std::string Game::Shard::name() {
-        return game["shard"]["name"].as<std::string>();
-    }
+            int progressTotal() {
+                return game["gcl"]["progressTotal"].as<int>();
+            }
 
-    std::string Game::Shard::type() {
-        return game["shard"]["type"].as<std::string>();
-    }
+        } // namespace Gcl
 
-    bool Game::Shard::ptr() { return game["shard"]["ptr"].as<bool>(); }
+        namespace Gpl {
+            int level() { return game["gpl"]["level"].as<int>(); }
 
-    /*
-    std::unordered_map<std::string, std::string>
-    Game::Map::describeExits(std::string const& roomName) {
-        return {};
-    }
+            int progress() { return game["gpl"]["progress"].as<int>(); }
 
-    Find Game::Map::findExit(std::string const& fromRoom,
-                             std::string const& toRoom) {}
+            int progressTotal() {
+                return game["gpl"]["progressTotal"].as<int>();
+            }
+        } // namespace Gpl
 
-    std::vector<std::pair<Find, std::string>>
-    Game::Map::findRoute(std::string const& fromRoom,
-                         std::string const& toRoom) {}
+        namespace Shard {
 
-    int Game::Map::getRoomLinearDistance(std::string const& roomName1,
-                                         std::string const& roomName2,
-                                         bool continuous = false) {}
+            std::string name() {
+                return game["shard"]["name"].as<std::string>();
+            }
 
-    Room::Terrain Game::Map::getRoomTerrain(std::string const& roomName) {}
+            std::string type() {
+                return game["shard"]["type"].as<std::string>();
+            }
 
-    int Game::Map::getWorldSize() {}
+            bool ptr() { return game["shard"]["ptr"].as<bool>(); }
+        } // namespace Shard
 
-    bool Game::Map::isRoomAvailable(std::string const& roomName) {}
+        namespace Map {
+            std::unordered_map<Direction, Room::Name>
+            describeExits(std::string const& roomName) {
+                return {};
+            }
 
-    int Game::Market::credits();
+            Find findExit(std::string const& fromRoom,
+                          std::string const& toRoom) {
+                return game["map"].call<Find>("findExit", fromRoom, toRoom);
+            }
 
-    std::vector<Transaction> Game::Market::incomingTransactions();
-    std::vector<Transaction> Game::Market::outgoingTransactions();
-    std::unordered_map<std::string, Order> Game::Market::orders();
-    int Game::Market::calcTransactionCost(int amount,
-                                          std::string const& roomName1,
-                                          std::string const& roomName2);
-    Error Game::Market::cancelOrder(std::string const& orderId);
-    Error Game::Market::changeOrderPrice(std::string const& orderId,
-                                         int newPrice);
-    Error Game::Market::createOrder(std::string const& type,
-                                    std::string const& resourceType, int price,
-                                    int totalAmount,
-                                    std::string const& roomName);
-    Error Game::Market::deal(std::string const& orderId, int amount,
-                             std::string const& yourRoomName);
-    Error Game::Market::extendOrder(std::string const& orderId, int addAmount);
-    Order Game::Market::getOrderById(std::string const& id);
-    */
+            std::vector<std::pair<Find, std::string>>
+            findRoute(std::string const& fromRoom, std::string const& toRoom) {
+                return {};
+            }
 
-    int Game::time() { return game["time"].as<int>(); }
+            int getRoomLinearDistance(std::string const& roomName1,
+                                      std::string const& roomName2,
+                                      bool continuous = false) {
+                return game["map"].call<int>("getRoomLinearDistance", roomName1,
+                                             roomName2, continuous);
+            }
 
-    emscripten::val Game::getObjectById(std::string const& id) {
-        return game.call<emscripten::val>("getObjectById", id);
-    }
+            Room::Terrain getRoomTerrain(std::string const& roomName) {
+                return {};
+            }
 
-    void Game::notify(std::string const& message,
-                      unsigned int groupInterval) {
-        game.call<void>("notify", message, groupInterval);
-    }
+            int getWorldSize() { return game["map"].call<int>("getWorldSize"); }
+
+            bool isRoomAvailable(std::string const& roomName) {
+                return game["map"].call<bool>("isRoomAvailable", roomName);
+            }
+        } // namespace Map
+
+        namespace Market {
+            int credits() { return game["market"]["credits"].as<int>(); }
+            std::vector<Transaction> incomingTransactions() { return {}; }
+            std::vector<Transaction> outgoingTransactions() { return {}; }
+            std::unordered_map<std::string, Order> orders() { return {}; }
+            int calcTransactionCost(int amount, Room::Name const& room1,
+                                    Room::Name const& room2) {
+                return game["market"].call<int>("calcTransactionCost", amount,
+                                                room1, room2);
+            }
+            Error cancelOrder(Order::Id const& id) {
+                return game["market"].call<Error>("cancelOrder", id);
+            }
+            Error changeOrderPrice(Order::Id const& id, int newPrice) {
+                return game["market"].call<Error>("changeOrderPrice", id,
+                                                  newPrice);
+            }
+            Error createOrder(Order::Type const& type, Resource resource,
+                              int price, int totalAmount,
+                              Room::Name const& room) {
+                return game["market"].call<Error>("createOrder", type, resource,
+                                                  price, totalAmount, room);
+            }
+            Error deal(Order::Id const& id, int amount,
+                       Room::Name const& yourRoom) {
+                return game["market"].call<Error>("deal", id, amount,
+                                                  yourRoom);
+            }
+            Error extendOrder(Order::Id const& id, int addAmount) {
+                return game["market"].call<Error>("extendOrder", id, addAmount);
+            }
+            Order getOrderById(Order::Id const& id) {
+                return game["market"].call<Order>("getOrderById", id);
+            }
+        } // namespace Market
+
+        int time() { return game["time"].as<int>(); }
+
+        emscripten::val getObjectById(std::string const& id) {
+            return game.call<emscripten::val>("getObjectById", id);
+        }
+
+        void notify(std::string const& message, unsigned int groupInterval) {
+            game.call<void>("notify", message, groupInterval);
+        }
+    } // namespace Game
 } // namespace Screeps

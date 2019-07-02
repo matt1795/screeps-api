@@ -1,4 +1,7 @@
+#pragma once
+namespace Screeps {
     class Storage {
-        STORAGE_CAPACITY: 1000000,
-        STORAGE_HITS: 10000,
+        inline static int capacity = 1000000;
+        inline static int hits = 10000;
     };
+}

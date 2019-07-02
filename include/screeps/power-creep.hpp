@@ -1,7 +1,10 @@
 #pragma once
 
+#include <string>
+
 namespace Screeps {
-    class PowerCreep {
+    struct PowerCreep {
+        using Name = std::string;
 
     };
 }

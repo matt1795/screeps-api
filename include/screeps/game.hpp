@@ -21,86 +21,80 @@
 #include "screeps/transaction.hpp"
 #include "screeps/types.hpp"
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 
 namespace Screeps {
-    class Game {
-        inline static emscripten::val game = emscripten::val::global("Game");
+    namespace Game {
+        std::unordered_map<Id, ConstructionSite> const& constructionSites();
+        std::unordered_map<Creep::Name, Creep> const& creeps();
+        std::unordered_map<Flag::Name, Flag> const& flags();
+        std::unordered_map<PowerCreep::Name, PowerCreep> const& powerCreeps();
+        std::unordered_map<Room::Name, Room> const& rooms();
+        std::unordered_map<Spawn::Name, Spawn> const& spawns();
+        std::unordered_map<Id, Structure> const& structures();
 
-      public:
-        static std::unordered_map<Id, ConstructionSite> constructionSites();
-        static std::unordered_map<Creep::Name, Creep> creeps();
-        static std::unordered_map<std::string, Flag> flags();
-        static std::unordered_map<std::string, PowerCreep> powerCreeps();
-        static std::unordered_map<std::string, Room> rooms();
-        static std::unordered_map<std::string, Spawn> spawns();
-        static std::unordered_map<std::string, Structure> structures();
-
-        struct Cpu {
-            static int limit();
-            static int tickLimit();
-            static int bucket();
+        namespace Cpu {
+            int limit();
+            int tickLimit();
+            int bucket();
             // TODO: shard limits
-        };
+        }; // namespace Cpu
 
-        struct Gcl {
-            static int level();
-            static int progress();
-            static int progressTotal();
-        };
+        namespace Gcl {
+            int level();
+            int progress();
+            int progressTotal();
+        }; // namespace Gcl
 
-        struct Gpl {
-            static int level();
-            static int progress();
-            static int progressTotal();
-        };
+        namespace Gpl {
+            int level();
+            int progress();
+            int progressTotal();
+        }; // namespace Gpl
 
-        struct Shard {
-            static std::string name();
-            static std::string type();
-            static bool ptr();
-        };
+        namespace Shard {
+            std::string name();
+            std::string type();
+            bool ptr();
+        }; // namespace Shard
 
-        struct Map {
-            static std::unordered_map<std::string, std::string>
+        namespace Map {
+            std::unordered_map<std::string, std::string>
             describeExits(Room const& room);
             // TODO: pathfinding options
-            static Find findExit(Room const& fromRoom, Room const& toRoom);
+            Find findExit(Room const& fromRoom, Room const& toRoom);
             // TODO: pathfinding options
-            static std::vector<std::pair<Find, std::string>>
+            std::vector<std::pair<Find, std::string>>
             findRoute(Room const& fromRoom, Room const& toRoom);
-            static int getRoomLinearDistance(Room const& room1,
-                                             Room const& room2,
-                                             bool continuous = false);
-            static Room::Terrain getRoomTerrain(Room const& room);
-            static int getWorldSize();
-            static bool isRoomAvailable(Room const& room);
-        };
+            int getRoomLinearDistance(Room const& room1, Room const& room2,
+                                      bool continuous = false);
+            Room::Terrain getRoomTerrain(Room const& room);
+            int getWorldSize();
+            bool isRoomAvailable(Room const& room);
+        }; // namespace Map
 
-        struct Market {
-            static int credits();
-            static std::vector<Transaction> incomingTransactions();
-            static std::vector<Transaction> outgoingTransactions();
-            static std::unordered_map<std::string, Order> orders();
-            static int calcTransactionCost(int amount, Room const& room1,
-                                           Room const& room2);
-            static Error cancelOrder(Order::Id const& id);
-            static Error changeOrderPrice(Order::Id const& id, int newPrice);
-            static Error createOrder(Order::Type const& type,
-                                     Resource const& resource, int price,
-                                     int totalAmount,
-                                     std::string const& roomName);
-            static Error deal(Order::Id const& id, int amount,
-                              Room const& yourRoom);
-            static Error extendOrder(Order::Id const& id, int addAmount);
+        namespace Market {
+            int credits();
+            std::vector<Transaction> incomingTransactions();
+            std::vector<Transaction> outgoingTransactions();
+            std::unordered_map<std::string, Order> orders();
+            int calcTransactionCost(int amount, Room const& room1,
+                                    Room const& room2);
+            Error cancelOrder(Order::Id const& id);
+            Error changeOrderPrice(Order::Id const& id, int newPrice);
+            Error createOrder(Order::Type const& type, Resource const& resource,
+                              int price, int totalAmount,
+                              std::string const& roomName);
+            Error deal(Order::Id const& id, int amount, Room const& yourRoom);
+            Error extendOrder(Order::Id const& id, int addAmount);
             // TODO: getAllOrders
-            static Order getOrderById(Order::Id const& id);
-        };
+            Order getOrderById(Order::Id const& id);
+        }; // namespace Market
 
-        static int time();
-        static emscripten::val getObjectById(Id const& id);
-        static void notify(std::string const& message,
-                           unsigned int groupInterval = 0);
-    };
+        int time();
+        emscripten::val getObjectById(Id const& id);
+        void notify(std::string const& message, unsigned int groupInterval = 0);
+    }; // namespace Game
 } // namespace Screeps

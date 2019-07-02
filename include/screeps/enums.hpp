@@ -1,6 +1,27 @@
 #pragma once
 
 namespace Screeps {
+    enum class StructureType {
+        Spawn,
+        Extension,
+        Road,
+        Wall,
+        Rampart,
+        KeeperLair,
+        Portal,
+        Controller,
+        Link,
+        Storage,
+        Tower,
+        Observer,
+        PowerBank,
+        PowerSpawn,
+        Extractor,
+        Lab,
+        Terminal,
+        Container,
+        Nuker
+    };
     enum class Error {
         Ok = 0,
         NotOwner = -1,

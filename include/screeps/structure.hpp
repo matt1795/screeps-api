@@ -3,35 +3,17 @@
 #include "screeps/room-object.hpp"
 #include "screeps/types.hpp"
 
+#include <emscripten/val.h>
+
 namespace Screeps {
     class Structure : public RoomObject {
       public:
-        enum class Type {
-            Spawn,
-            Extension,
-            Road,
-            Wall,
-            Rampart,
-            KeeperLair,
-            Portal,
-            Controller,
-            Link,
-            Storage,
-            Tower,
-            Observer,
-            PowerBank,
-            PowerSpawn,
-            Extractor,
-            Lab,
-            Terminal,
-            Container,
-            Nuker
-        };
-
+        Structure(emscripten::val object)
+            : RoomObject(object) {}
         int hits() const;
         int hitsMax() const;
         Id id() const;
-        Type structureType() const;
+        StructureType structureType() const;
 
         Error destroy();
         bool isActive();

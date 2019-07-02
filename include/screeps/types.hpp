@@ -8,4 +8,7 @@
 namespace Screeps {
     using Id = std::string;
     using Path = std::vector<RoomPosition>;
+
+    class RoomObject;
+    class Structure;
 }
